@@ -1,0 +1,17 @@
+﻿@page "/Details/{id:int}"
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+<h3>DetailsComponent</h3>
+<h1 class="alert alert-danger">@dept?.DeptId :: @dept?.DeptName :: @dept?.DeptDesc</h1>
+@code {
+	[Parameter]
+	public int id { get; set; }
+	public Dept dept { get; set; }
+	[Inject]
+	public IService<Dept> service { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		dept =await  service.GetById(id);
+		await base.OnInitializedAsync();
+	}
+}

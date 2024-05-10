@@ -1,0 +1,49 @@
+﻿@page "/"
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+
+<PageTitle>Home</PageTitle>
+<style>
+	.Wrapper {
+		width: 500px;
+		height: 200px;
+		background-color: gainsboro;
+		display: flex;
+		flex-direction: row;
+		border-radius: 10px;
+		
+		
+
+	}
+	.main {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+</style>
+<div class="main">
+
+	<div class="Wrapper">
+		<img src="/Apartment rent-pana.svg" />
+		<h1 style="font-size:130px;margin-left:40px;">@students</h1>
+	</div>
+	<div class="Wrapper">
+		<img src="/happy student-amico.svg" />
+		<h1 style="font-size:130px;margin-left:40px;">@depts</h1>
+	</div>
+</div>
+@code {
+	public int students;
+	public int depts;
+
+	[Inject]
+	public IService<Student> service { get; set; }
+	[Inject]
+	public IService<Dept> dservice { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		students = await service.GetStudentsCount();
+		depts = await dservice.GetDeptsCount();
+		base.OnInitializedAsync();
+	}
+}

@@ -1,0 +1,82 @@
+﻿@page "/Edit/{id:int}"
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+@inject NavigationManager navigate
+<PageTitle>Edit Dept</PageTitle>
+<h3>Edit Dept</h3>
+@if (dept != null)
+{
+    <EditForm Model="dept" OnValidSubmit="Save">
+        <div>
+            <label>id</label>
+            <InputNumber @bind-Value="dept.DeptId" class="form form-control"></InputNumber>
+            <div>
+                <ValidationMessage For="()=>dept.DeptId"></ValidationMessage>
+            </div>
+        </div>
+        <div>
+            <label>Name</label>
+            <InputText @bind-Value="dept.DeptName" class="form form-control"></InputText>
+            <div>
+                <ValidationMessage For="()=>dept.DeptName"></ValidationMessage>
+            </div>
+        </div>
+        <div>
+            <label>description</label>
+            <InputText @bind-Value="dept.DeptDesc" class="form form-control"></InputText>
+            <div>
+                <ValidationMessage For="()=>dept.DeptDesc"></ValidationMessage>
+            </div>
+        </div>
+        <div>
+            <label>Location</label>
+            <InputText @bind-Value="dept.DeptLocation" class="form form-control"></InputText>
+            <div>
+                <ValidationMessage For="()=>dept.DeptLocation"></ValidationMessage>
+            </div>
+        </div>
+         <div>
+            <label>Dept Manager</label>
+            <InputText @bind-Value="dept.DeptManager" class="form form-control"></InputText>
+            <div>
+                <ValidationMessage For="()=>dept.DeptManager"></ValidationMessage>
+            </div>
+        </div>
+        <div>
+            <label>heiredate</label>
+            <InputText @bind-Value="dept.ManagerHiredate" class="form form-control"></InputText>
+            <div>
+                <ValidationMessage For="()=>dept.ManagerHiredate"></ValidationMessage>
+            </div>
+        </div>
+        <input type="submit" value="Save" class="btn btn-success" />
+    </EditForm>
+}
+else
+{
+    <h1>Wait .. or invalid id</h1>
+}
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public Dept dept { get; set; }
+    [Inject]
+    public IService<Dept> DeptService { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        dept =await  DeptService.GetById(id);
+        base.OnInitializedAsync();
+    }
+    public async void Save()
+    {
+        await DeptService.Edit(id, dept);
+        navigate.NavigateTo("/Depts");
+
+    }
+
+}
+

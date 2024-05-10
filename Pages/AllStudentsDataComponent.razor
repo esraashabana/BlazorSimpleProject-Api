@@ -1,0 +1,56 @@
+﻿@page "/AllStudentsData"
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+<h3>AllStudents</h3>
+<PageTitle>Students</PageTitle>
+<table class="table table-bordered table-hover">
+	<thead>
+		<tr style="text-align:center">
+			<th>
+				Id
+			</th>
+			<th>
+				Name
+			</th>
+			<th>Address</th>
+			<th>Age</th>
+			<th>Dept Name</th>
+			
+
+			<th>Details</th>
+			<th>Edit</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if(students != null)
+		{
+			@foreach (var item in students)
+			{
+				<tr style="text-align:center">
+					<td>@item?.StId</td>
+					<td>@item?.StFname</td>
+					<td>
+						@item?.StAddress
+					</td>
+					<td>@item?.StAge</td>
+					<td>@item?.DeptName</td>
+					
+					<td><a class="btn" href="/StudentDetails/@item?.StId" style="background-color:purple;color:white">Details</a></td>
+					<td><a class="btn" href="/EditStudent/@item?.StId" style="background-color:darkslateblue;color:white">Edit</a></td>
+				</tr>
+			}
+		}	
+	</tbody>
+</table>
+@code {
+	public List<Student> students;
+
+	[Inject]
+	public IService<Student> service { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		students =await  service.GetAll();
+		 base.OnInitializedAsync();
+	}
+	
+}

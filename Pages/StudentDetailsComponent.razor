@@ -1,0 +1,17 @@
+﻿@page "/StudentDetails/{id:int}"
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+<h3>Details</h3>
+<h1 class="alert alert-danger">@std?.StId :: @std?.StFname :: @std?.DeptName :: @std?.StAge</h1>
+@code {
+	[Parameter]
+	public int id { get; set; }
+	public Student std { get; set; }
+	[Inject]
+	public IService<Student> service { get; set; }
+	protected override async Task OnInitializedAsync()
+	{
+		std = await service.GetById(id);
+		await base.OnInitializedAsync();
+	}
+}

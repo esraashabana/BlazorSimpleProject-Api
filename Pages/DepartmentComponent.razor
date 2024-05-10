@@ -1,0 +1,48 @@
+﻿@page "/Depts"
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+<PageTitle>All Depts Data</PageTitle>
+<h3>Depts</h3>
+@if (EmpList != null)
+{
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Dept Description</th>
+            <th>Dept Location</th>
+            <th>ManagerHiredate</th>
+            <th>Details</th>
+            <th>Edit</th>
+                        
+        </tr>
+        @foreach (var item in EmpList)
+        {
+            <tr>
+                <td>@item.DeptId</td>
+                <td>@item?.DeptName</td>
+                <td>@item?.DeptDesc</td>
+                <td>@item?.DeptLocation</td>
+                <td>@item?.ManagerHiredate</td>
+                <td><a class="btn" href="/Details/@item?.DeptId" style="background-color:purple;color:white">Details</a></td>
+                <td><a class="btn" href="/Edit/@item?.DeptId" style="background-color:darkslateblue;color:white">Edit</a></td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h1>Wait.....</h1>
+}
+@code {
+    public List<Dept> EmpList { get; set; }
+
+    [Inject]
+    public IService<Dept> EmpService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmpList = await EmpService.GetAll();
+        await base.OnInitializedAsync();
+    }
+}

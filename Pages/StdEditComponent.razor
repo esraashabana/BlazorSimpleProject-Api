@@ -1,0 +1,70 @@
+﻿@page "/EditStudent/{id:int}"
+<h3>Edit:-</h3>
+@using ApiConsumer.Models
+@using ApiConsumer.Services
+@inject NavigationManager navigate
+@if (std != null)
+{
+    <EditForm Model="std" OnValidSubmit="Save">
+        <div>
+            <label>id</label>
+            <InputNumber @bind-Value="std.StId" class="form form-control"></InputNumber>
+           
+        </div>
+        <div>
+            <label>Name</label>
+            <InputText @bind-Value="std.StFname" class="form form-control"></InputText>
+           
+        </div>
+        <div>
+            <label>Last Name</label>
+            <InputText @bind-Value="std.StLname" class="form form-control"></InputText>
+
+        </div>
+        <div>
+            <label>Address</label>
+            <InputText @bind-Value="std.StAddress" class="form form-control"></InputText>
+        </div>
+        <div>
+            <label>Age</label>
+            <InputNumber @bind-Value="std.StAge" class="form form-control"></InputNumber>
+        </div>
+        <div>
+            <label>Dept Name</label>
+            <InputText @bind-Value="std.DeptName" class="form form-control"></InputText>
+        </div>
+        <div>
+            <label>Super Name</label>
+            <InputText @bind-Value="std.SuperName" class="form form-control"></InputText>
+        </div>
+        
+        <input type="submit" value="Save" class="btn btn-success" />
+    </EditForm>
+}
+else
+{
+    <h1>Wait .. or invalid id</h1>
+}
+
+
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public Student std { get; set; }
+    [Inject]
+    public IService<Student> Service { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        std = await Service.GetById(id);
+        base.OnInitializedAsync();
+    }
+    public async void Save()
+    {
+        await Service.Edit(id, std);
+        navigate.NavigateTo("/AllStudentsData");
+
+    }
+
+}
